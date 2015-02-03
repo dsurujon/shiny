@@ -4,34 +4,26 @@ shinyServer(
 	function(input, output) {
 
 	datatable<-reactive({
-		inputfile<-input$mytable
-		if(is.null(inputfile)){return(NULL)}
-		dtable<-read.csv(inputfile$datapath, sep=",", header=FALSE)
+		dtable<-read.csv("data/sgpfbge-2-1-2015.csv", sep=",", header=FALSE)
 		names(dtable)<-c("Experiment.ID","Control","Experiment","Gene","Type","Organism","Cell.Type","Up.Genes","Down.Genes","Submitted.By","Time.Submitted","Index")
 		return(dtable)
 	})
-	output$checkUpload<-reactive({
-		if(is.null(datatable())){return(NULL)}
-		else{return(TRUE)}
-	})
 	output$contents<-renderTable({
-		if (is.null(input$mytable)){return(NULL)}
 		return (datatable()[,c(1,4:7,10:12)])
 	})
 	output$summary<-renderPrint({
-		if (is.null(input$mytable)){return(NULL)}
 		summary(datatable()[,4:7])
 	})
 	output$experiments<-renderUI({
-		return(selectInput("expt","Experiment",choices=as.character(datatable()[,1])))
+		return(selectInput("genename","Gene Name",choices=as.character(datatable()[,4])))
 	})
 	output$selectedexpt<-renderTable({
 		d<-datatable()
-		return(d[d$Experiment.ID==input$expt,c(1,4:7,10:12)])
+		return(d[d$Gene==input$genename,c(1,4:7,10:12)])
 	})
 	output$listexpts<-renderUI({
 		d<-datatable()
-		return(selectInput("selectexpt","Select Experiment by Index", choices=(d[d$Experiment.ID==input$expt,c(1,4:7,10:12)])$Index))
+		return(selectInput("selectexpt","Select Experiment by Index", choices=(d[d$Gene==input$genename,c(1,4:7,10:12)])$Index))
 
 	})
 	PAEA<-reactive({
@@ -41,7 +33,7 @@ shinyServer(
 
 		#load data
 		data(example_gammas)
-		data(GeneOntology_BP.gmt)
+		data(KEGG_pathways.gmt)
 
 		#get upregulated genes from datatable
 		select.up<-x$Up.Genes[x$Index==selected]
@@ -103,6 +95,6 @@ shinyServer(
 		names(downTable)<-c("p value")
 		return(downTable)
 	})	
-	outputOptions(output,'checkUpload',suspendWhenHidden=FALSE)
+	
 
 })
