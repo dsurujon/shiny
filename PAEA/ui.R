@@ -4,7 +4,7 @@ shinyUI(fluidPage(
 
 		uiOutput("experiments"),			
 
-		tags$p("Upload a csv file containing Geo2Enrichr output data. Then select an experiment by gene name. The 'PAEA Main' panel will display the selected experiment and allow for further selection if there are multiple entries with the same gene perturbation. The 'PAEA UP' and 'PAEA DOWN' panels show the plotted and tabulated results for up- and down-regulated gene sets. The 'Contents' panel shows a truncated version of the the data table uploaded. The 'Summary' tab shows a summary of the data table ")
+		tags$p("Select an experiment by gene name from the Geo2Enrichr data. The 'PAEA Main' panel will display all experiments involving perturbations in that gene and allow for further selection if there are multiple entries. The 'PAEA UP' and 'PAEA DOWN' panels show the plotted and tabulated results for up- and down-regulated gene sets. The 'Contents' panel shows a truncated version of the the data table uploaded. The 'Summary' tab shows a summary of the data table ")
 	
 	), #sidebarPanel	
 	mainPanel(
@@ -12,9 +12,8 @@ shinyUI(fluidPage(
 			tabPanel("Contents",tableOutput('contents')),
 			tabPanel("Summary",verbatimTextOutput('summary')),
 			tabPanel("PAEA Selection",
-				tags$p("Selected Experiment:"),
-				tableOutput('selectedexpt'),
-				uiOutput("listexpts")
+				tags$p("Experiments with selected gene:"),
+				dataTableOutput('selectedexpt')
 			),#tabPanel-PAEA Selection
 
 			tabPanel("PAEA UP",

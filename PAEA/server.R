@@ -17,18 +17,16 @@ shinyServer(
 	output$experiments<-renderUI({
 		return(selectInput("genename","Gene Name",choices=as.character(datatable()[,4])))
 	})
-	output$selectedexpt<-renderTable({
+	output$selectedexpt<-renderDataTable({
 		d<-datatable()
-		return(d[d$Gene==input$genename,c(1,4:7,10:12)])
-	})
-	output$listexpts<-renderUI({
-		d<-datatable()
-		return(selectInput("selectexpt","Select Experiment by Index", choices=(d[d$Gene==input$genename,c(1,4:7,10:12)])$Index))
+		d<-d[d$Gene==input$genename,c(1,4:7,10:12)]
+		addRadioButtons<-paste0('<input type="radio" name="selectedexpt" id="', c(d$Index), '" value="', c(d$Index), '">',"")
+		cbind(Pick=addRadioButtons, d)
+  	})
 
-	})
 	PAEA<-reactive({
 		x<-datatable()
-		selected<-input$selectexpt
+		selected<-input$selectedexpt
 		if(is.null(x)){return(NULL)}
 
 		#load data
