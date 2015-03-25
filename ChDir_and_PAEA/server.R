@@ -114,7 +114,9 @@ shinyServer(
 			setnames(expr_table,1,"ID")
 			#remove all entries with ":" in them (chromosomal locations)
 			values$expr_table<-data.frame(expr_table[sapply(expr_data$IDENTIFIER,function(x) !grepl(":",x)),lapply(.SD,mean),by=ID])
-			
+			#get rid of empty values
+			values$expr_table<-values$expr_table[complete.cases(values$expr_table),]
+
 			#in case the data is too large - test with a manageable portion
 			#cat(nrow(values$expr_table),"\n")
 			#if(nrow(values$expr_table)>100){values$expr_data<-values$expr_data[1:100,]}
