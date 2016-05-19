@@ -9,9 +9,12 @@ shinyUI(fluidPage(
 		tags$p("Make sure the labels file is tab separated and has two columns: one for animal ID('id') and one for group('gp')"),
 		textInput("fig1_label", label = p("Figure 1 Label"), value = "Body Composition")
 		
+		
 	), #sidebarPanel
 	mainPanel(
-			tags$p('Significance Summary (Student T-test p-values):'),
+			uiOutput('select_category1'),
+			uiOutput('select_category2'),
+			tags$p('Significance Summary:'),
 			tableOutput('MRIdata'),
 			tags$p('Graphical summary of data:'),
 			plotOutput('MRIbar')
