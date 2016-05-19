@@ -7,7 +7,10 @@ shinyUI(fluidPage(
 		fileInput("MRI_data_file","Upload a data file"),
 		fileInput("MRI_labels","Upload a labels file"),
 		tags$p("Make sure the labels file is tab separated and has two columns: one for animal ID('id') and one for group('gp')"),
-		textInput("fig1_label", label = p("Figure 1 Label"), value = "Body Composition")
+		textInput("fig1_label", label = p("Figure 1 Label"), value = "Body Composition"),
+		checkboxInput("outliers", "Include outliers", TRUE),
+		tags$p("Outlier(s) removed:"),
+		verbatimTextOutput("outliers")
 		
 		
 	), #sidebarPanel
