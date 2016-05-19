@@ -1,7 +1,7 @@
 library(shiny)
 
 #some global variables
-values<-reactiveValues(data_submitted=FALSE,labels_submitted=FALSE,pvals=NULL,mriraw1=NULL,mrilables=NULL,twowayANOVA=FALSE)
+values<-reactiveValues(data_submitted=FALSE,labels_submitted=FALSE,pvals=NULL,mriraw1=NULL,mrilables=NULL,twowayANOVA=FALSE,outlier.individuals="")
 
 shinyServer(function(input, output) {	
 
@@ -28,7 +28,11 @@ shinyServer(function(input, output) {
 			values$twowayANOVA<-(totalnumcats>1)
 		})
 	})
-
+	##display the outliers that were removed
+	output$outliers<-renderText({
+		return(values$outlier.individuals)
+	})
+	
 	##Dropdown list generated from the label categories
 	output$select_category1<-renderUI({
 		if(!is.null(values$mrilabels)){
@@ -61,7 +65,31 @@ shinyServer(function(input, output) {
 		mat2 <- merge(mri, values$mrilabels, by="id")
 		if(values$twowayANOVA){mat2$group000<-paste0(as.character(mat2[input$select_cat1][,1]),".",as.character(mat2[input$select_cat2][,1]))}
 		else{mat2$group000<-as.character(mat2[input$select_cat1][,1])}
+		
+		#function to replace outliers with NA
+		remove.outliers<-function(x){
+			low<-mean(x)-2*sd(x)
+			high<-mean(x)+2*sd(x)
+			x[x<low]<-NA
+			x[x>high]<-NA
+			return(x)
+		}
+		
+		#check for outliers
+		if(!input$outliers){
+			for(pheno in c("Fat", "Lean", "Weight", "Fbw")){
+				for(i in unique(mat2$group000)){
+					mat2[which(mat2$group000==i),pheno]<-remove.outliers(mat2[which(mat2$group000==i),pheno])
+				}
+			}
+		values$outlier.individuals<-as.character(mat2[!(complete.cases(mat2)),1])
+		mat2<-mat2[complete.cases(mat2),]
+		print("Otliers removed")
+		}
+		else{values$outlier.individuals<-""}
 		groups<-list(group000=mat2$group000)
+
+		#print(mat2)
 		mri.values <- aggregate(mat2[c("Fat", "Lean", "Weight", "Fbw")],groups,mean, simplify=TRUE)
 		rownames(mri.values)<-mri.values[,1]
 		mri.values <- mri.values[,2:ncol(mri.values)]
@@ -78,7 +106,6 @@ shinyServer(function(input, output) {
 		
 		if(values$twowayANOVA){
 			print("computing anova")
-
 			multi.anova<-function(x){
 				mat2.aov<-aov(mat2[x][,1]~mat2[input$select_cat1][,1]*mat2[input$select_cat2][,1])
 				summary.mat2.aov<-as.data.frame(summary(mat2.aov)[[1]])
@@ -94,7 +121,6 @@ shinyServer(function(input, output) {
 			print("computing p-values")
 			pvalues<-function(x){
 				tuk<-TukeyHSD(aov(mat2[x][,1]~mat2["group000"][,1]))
-				print(tuk)
 				return (tuk[[1]][,4])
 			} 
 			
