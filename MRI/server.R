@@ -96,8 +96,14 @@ shinyServer(function(input, output) {
 		mri.values <- as.matrix(mri.values)
 		values$mri.value<-mri.values
 		
-		#compute SEM
+		#compute SEM or SD
 		stderr <- function(x) sqrt(var(x)/length(x))
+		if (input$bars==1){
+			mri.errbar <- aggregate(mat2[c("Fat", "Lean", "Weight", "Fbw")],list(group000=mat2$group000),stderr, simplify=TRUE)
+			}
+		else if (input$bars==2){ 
+			mri.errbar <- aggregate(mat2[c("Fat", "Lean", "Weight", "Fbw")],list(group000=mat2$group000),sd, simplify=TRUE)
+			}
 		mri.errbar <- aggregate(mat2[c("Fat", "Lean", "Weight", "Fbw")],list(group000=mat2$group000),stderr, simplify=TRUE)
 		rownames(mri.errbar) <- mri.errbar[,1]
 		mri.errbar[,1] <- NULL
