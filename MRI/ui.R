@@ -10,7 +10,8 @@ shinyUI(fluidPage(
 		textInput("fig1_label", label = p("Figure 1 Label"), value = "Body Composition"),
 		checkboxInput("outliers", "Include outliers", TRUE),
 		tags$p("Outlier(s) removed:"),
-		verbatimTextOutput("outliers")
+		verbatimTextOutput("outliers"),
+		radioButtons('bars',"Error bars show:",c("Standard Error"=1,"Standard Deviation"=2))
 		
 		
 	), #sidebarPanel
