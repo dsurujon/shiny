@@ -1,0 +1,9 @@
+{
+    "path" : "~/BC/TVO/pangenome/pangenome_app/data",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}

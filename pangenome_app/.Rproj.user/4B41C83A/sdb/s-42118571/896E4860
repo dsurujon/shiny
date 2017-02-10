@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "setwd(\"C:/Users/Defne/Documents/BC/TVO/pangenome\")\nlibrary(ggplot2)\nlibrary(boot)\n\n\n#number of genes shared across all strains\ncoregenecount<-function(pangenome){\n\treturn(length(which(complete.cases(pangenome))))\n}\n\n#total number of genes that exist across all strains\nallgenecount<-function(pangenome){\n\tif (class(pangenome)==\"data.frame\"){\n\t\tind<-apply(pangenome, 1, function(x) all(is.na(x)))\n\t\treturn(nrow(pangenome)-length(which(ind)))\n\t} else{\n\t\treturn (length(which(!is.na(pangenome))))\n\t}\n}\n\ncount<-function(data,indices){\n\td <- data[indices,]\n\tp<-apply(d,1,function(x) length(which(!is.na(x))) )\n\treturn (mean(p))\n}\n\niterategenomes<-function(pg,r){\n\tx=seq(0,ncol(pg),by=7)\n\txx=seq(0,ncol(pg))\n\txlen=length(x)\n\titercore.mean=rep(0,xlen)\n\titerpan.mean=rep(0,xlen)\n\titercore.se=rep(0,xlen)\n\titerpan.se=rep(0,xlen)\n\titercore.ci=rep(0,xlen)\n\titerpan.ci=rep(0,xlen)\n\tfor (iter in x){\n\t\tprint(iter)\n\t\titercore=x\n\t\titerpan=x\n\t\tfor (j in c(1:xlen)){\n\t\t\tmysample=sample(xx,iter)\n\t\t\tpgsub=pg[,mysample]\n\t\t\titercore[j]<-coregenecount(pgsub)\n\t\t\titerpan[j]<-allgenecount(pgsub)\n\t\t}\n\t\titercore.mean[iter]<-mean(itercore)\n\t\titerpan.mean[iter]<-mean(iterpan)\n\t\titercore.se[iter]<-sd(itercore)\n\t\titerpan.se[iter]<-sd(iterpan)\n\t\titercore.ci[iter]<-try(t.test(itercore)$conf.int[2]-itercore.mean[iter])\n\t\titerpan.ci[iter]<-try(t.test(iterpan)$conf.int[2]-iterpan.mean[iter])\n\t}\n\treturn (list(itercore.mean,itercore.se,itercore.ci,iterpan.mean,iterpan.se,iterpan.ci))\n\n}\n\nmain<-function(csvfile){\n\tprint(csvfile)\n\tpg<-read.csv(csvfile,header=T)\n\t#blanks are currently empty strings rather than NA\n\tpg<-as.data.frame(lapply(pg,function(x) if(is.character(x)|is.factor(x)) gsub(\" \",NA,x) else x))\n\n\tpgcorecounts<-rep(0,ncol(pg)-1)\n\tpgallcounts<-rep(0,ncol(pg)-1)\n\n#\tfor (i in c(2:ncol(pg))){\n#\t\tpgsub<-pg[,2:i]\n#\t\tpgcorecounts[i-1]<-coregenecount(pgsub)\n#\t\tpgallcounts[i-1]<-allgenecount(pgsub)\n#\t}\n\n\titerres<-iterategenomes(pg,30)\n\n\tgenecounts<-as.data.frame(cbind(unlist(iterres[1]),unlist(iterres[4]),unlist(iterres[2]),unlist(iterres[5])))\n\tnames(genecounts)<-c(\"itercore.mean\",\"iterpan.mean\",\"itercore.se\",\"iterpan.se\")\n\tgenecounts$Num.Genome<-c(1:nrow(genecounts))\n\n\tp<-ggplot(genecounts)+geom_point(aes(Num.Genome,itercore.mean),color=\"red\")+geom_point(aes(Num.Genome,iterpan.mean),color=\"blue\")+geom_errorbar(aes(x=Num.Genome,ymin=itercore.mean-itercore.se, ymax=itercore.mean+itercore.se))\n\tp<-p+geom_line(aes(Num.Genome,itercore.mean))+geom_line(aes(Num.Genome,iterpan.mean))+labs(x=\"Number of Genomes\",y=\"Number of genes\",title=\"Variation in the Core and Dispensable Genes\")+geom_errorbar(aes(x=Num.Genome,ymin=iterpan.mean-iterpan.se, ymax=iterpan.mean+iterpan.se))\n\tpgtest<-data.frame(cbind(as.character(pg$D39),as.character(pg$TIGR4),as.character(pg$X19F)))\n\tprint(\"core genome count for 3 strains: \")\n\tprint(coregenecount(pgtest))\n\tprint(\"All gene counts for 3 strains:\")\n\tprint(allgenecount(pgtest))\n\tprint(\"core genome count for all strains: \")\n\tprint(coregenecount(pg))\n\tprint(\"All gene counts for all strains:\")\n\tprint(allgenecount(pg))\n\tprint(p)\n\n\twrite.csv(genecounts,\"371_summary.csv\",quote=F)\n\t\n\t}\n\n\n#main(\"50_Strains_ID.7_AGG.csv\")\n#main(\"50_Strains_ID.8_AGG.csv\")\n#main(\"50_Strains_ID.8_40aa_AGG.csv\")\n\nmain(\"371_clusters.csv\")\n",
+    "created" : 1486700010198.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3354551485",
+    "id" : "896E4860",
+    "lastKnownWriteTime" : 1486700635,
+    "last_content_update" : 1486759613586,
+    "path" : "~/BC/TVO/pangenome/pangenome_summary9feb.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

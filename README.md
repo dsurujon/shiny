@@ -18,3 +18,7 @@ This app utilizes the Principle Angle Enrichment Analysis (PAEA) tool (available
 lasso_microbiome
 ---------------------------
 [This app](https://dsurujon.shinyapps.io/lasso_microbiome) will fit a generalized linear model based on intestinal microbiota to the clinical data selected from the drop down list above. Plot 1 shows the regression coefficients along varying constrainsts on the l1 norm of the entirety of the coefficient vector. Plot 2 is the cross-validation fit showing the mean squared errors over the penalty factor lambda. Table 1 shows the number of variables (Df) and % variability (Dev) explained at each lambda value calculated. The slider allows for the selection of any lambda and the resulting coefficients are presented in Table 2. Table 3 (not displayed) is the coefficients with the lambda that minimizes MSE. For more information visit [here](http://web.stanford.edu/~hastie/glmnet/glmnet_alpha.html)
+
+pangenome_app
+---------------------------
+[This app](https://dsurujon.shinyapps.io/pangenome_app) allows the user to select up to 374 strains of Streptococcus pneumoniae. It computes the core(genes shared by all) and pan(genes appearing in at least one strain) genome sizes for the selected strains, and also produces a dendrogram based on shared genes. There is also a downloadable table displayed that lists all genes found in the selected strains, with their gene locus information.

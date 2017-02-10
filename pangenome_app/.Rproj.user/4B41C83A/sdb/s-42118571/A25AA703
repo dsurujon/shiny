@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "setwd(\"C:/Users/Defne/Documents/BC/TVO/pangenome\")\npg<-read.csv(\"371_clusters.csv\",header=T,stringsAsFactors = FALSE)\npg2<-read.csv(\"374_clusters.csv\",header=T,stringsAsFactors = FALSE)\n#pgmeta<-read.csv(\"annotations and misc/genome_coverage_summary.csv\",header=T)\n\npg$S..infantis<-NULL\npg$S..mitis<-NULL\npg$S..pyogenes<-NULL\npg$S..sanguinis<-NULL\n\npg[pg==\" \"]<-NA\npg2[pg2==\" \"]<-NA\nxv<-ncol(pg)\nxv2<-ncol(pg2)\npan<-nrow(pg)\ncore<-length(which(complete.cases(pg)))\ncore2<-length(which(complete.cases(pg2)))\n\nget_distance<-function(pangenome,x,y){\n\tpgsub<-pangenome[,c(x,y)]\n\tshared<-length(which(complete.cases(pgsub)))\n\tneither<-nrow(pgsub[rowSums(is.na(pgsub))==2,])\n\tdistance<-nrow(pangenome)-shared-neither\n\treturn(distance)\n}\n\ndistance_matrix<-matrix(0,xv-1,xv-1)\ndistance_matrix2<-matrix(0,xv2-1,xv2-1)\nfor (i in c(2:xv)){\n\tfor (j in c(2:xv)){\n\t\tdistance_matrix[i-1,j-1]<-get_distance(pg,i,j)\n\t}\n}\n\nfor (i in c(2:xv2)){\n  for (j in c(2:xv2)){\n    distance_matrix2[i-1,j-1]<-get_distance(pg2,i,j)\n  }\n}\n\ncolnames(distance_matrix)<-names(pg)[2:xv]\ncolnames(distance_matrix2)<-names(pg2)[2:xv2]\nplot(hclust(as.dist(distance_matrix)))\n",
+    "created" : 1486685709741.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "447497161",
+    "id" : "A25AA703",
+    "lastKnownWriteTime" : 1486685214,
+    "last_content_update" : 1486685214,
+    "path" : "~/BC/TVO/pangenome/make_dendrogram.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
