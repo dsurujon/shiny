@@ -21,7 +21,8 @@ shinyServer(function(input, output,session) {
 	st<-st[rowSums(is.na(st))<xc-1,]
 	pan<-nrow(st)
 	core<-length(which(complete.cases(st)))	
-	
+	coret<-st[which(complete.cases(st)),]
+	accessoryt=st[!complete.cases(st),]
 	distance_matrix<-matrix(0,xc-1,xc-1)
 	for (i in c(2:xc)){
 		for (j in c(2:xc)){
@@ -29,7 +30,7 @@ shinyServer(function(input, output,session) {
 		}
 	}
 	colnames(distance_matrix)<-names(st)[2:xc]
-	return(list("subtable"=st,"pansize"=pan,"coresize"=core,"distances"=distance_matrix))
+	return(list("subtable"=st,"coretable"=coret,"accessorytable"=accessoryt,"pansize"=pan,"coresize"=core,"distances"=distance_matrix))
 
   })
 
@@ -38,6 +39,17 @@ shinyServer(function(input, output,session) {
 	tryCatch(
     prepare_subtable()$subtable
 	, error=function(e) message("No strains are selected."))
+  )
+  
+  output$selectionCore <- renderDataTable(
+    tryCatch(
+      prepare_subtable()$coretable
+      , error=function(e) message("No strains are selected."))
+  )
+  output$selectionAcc <- renderDataTable(
+    tryCatch(
+      prepare_subtable()$accessorytable
+      , error=function(e) message("No strains are selected."))
   )
   
   output$coreandpan<-renderText(
@@ -60,5 +72,19 @@ shinyServer(function(input, output,session) {
 	content=function(file){
 		write.csv(prepare_subtable()$subtable,file,row.names=FALSE)	
 	})
-
+  
+  output$subtableCore_dl<-downloadHandler(
+    filename=function(){
+      paste0(Sys.Date(),".genetable.csv")
+    },
+    content=function(file){
+      write.csv(prepare_subtable()$coretable,file,row.names=FALSE)	
+    })
+  
+  output$subtableAcc_dl<-downloadHandler(
+    filename="Accessory Gene Table.csv",
+    content=function(file){
+      write.csv(prepare_subtable()$accessorytable,file,row.names=FALSE)	
+    })
+  
 })

@@ -22,11 +22,20 @@ shinyUI(fluidPage(
 	
 	mainPanel(plotOutput("distance_phylogeny") )
 	),
-	fluidRow(
+	tabsetPanel(
+	  tabPanel("Full Gene Table",
 		tags$h2("Gene table for the selected strains"),
 		downloadButton('subtable_dl',"Download gene table"),
-		dataTableOutput("selection"))
-	
+		dataTableOutput("selection")),
 
-  
+	  tabPanel("Core Gene Table",
+	           tags$h2("Gene table for the core genome of the selected strains"),
+	           downloadButton('subtableCore_dl',"Download gene table"),
+	           dataTableOutput("selectionCore")),
+
+	  tabPanel("Accessory Gene Table",
+	           tags$h2("Gene table for the accessory genome of the selected strains"),
+	           downloadButton('subtableAcc_dl',"Download gene table"),
+	           dataTableOutput("selectionAcc"))
+	)
 ))
