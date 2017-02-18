@@ -24,6 +24,7 @@ shinyUI(fluidPage(
 	),
 	tabsetPanel(
 	  tabPanel("Full Gene Table",
+	 
 		tags$h2("Gene table for the selected strains"),
 		downloadButton('subtable_dl',"Download gene table"),
 		dataTableOutput("selection")),

@@ -3,6 +3,8 @@ title:
 account: dsurujon
 server: shinyapps.io
 appId: 156097
-bundleId: 707300
+bundleId: 716227
 url: https://dsurujon.shinyapps.io/pangenome_app/
-when: 1486746653.13807
+when: 1487443793.1598
+asMultiple: FALSE
+asStatic: FALSE
