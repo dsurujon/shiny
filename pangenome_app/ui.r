@@ -3,6 +3,10 @@ source("chooser.r")
 
 presence_table<-read.csv("data/374_clusters.csv",header=T,stringsAsFactors = FALSE)
 presence_table[presence_table==" "]<-NA
+product<-presence_table$Product
+presence_table$Product<-NULL
+presence_table<-presence_table[ , order(names(presence_table))]
+presence_table<-cbind(product,presence_table)
 xv<-ncol(presence_table)
 allstrains<-names(presence_table)[2:xv]
 

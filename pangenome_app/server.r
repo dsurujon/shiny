@@ -5,7 +5,6 @@ source("customdistance.r")
 
 presence_table<-read.csv("data/374_clusters.csv",header=T,stringsAsFactors = FALSE)
 presence_table[presence_table==" "]<-NA
-
 values<-reactiveValues()
 xv<-ncol(presence_table)
 allstrains<-names(presence_table)[2:xv]
