@@ -41,6 +41,12 @@ shinyUI(fluidPage(
 	  tabPanel("Accessory Gene Table",
 	           tags$h2("Gene table for the accessory genome of the selected strains"),
 	           downloadButton('subtableAcc_dl',"Download gene table"),
-	           dataTableOutput("selectionAcc"))
+	           dataTableOutput("selectionAcc")),
+		
+		tabPanel("Unique Genes",
+		         #downloadButton('subtableAcc_dl',"Download gene table"),
+		         uiOutput("unique_selector"),
+		         downloadButton('subtableUniqu_dl',"Download gene table"),
+		         dataTableOutput("unique_for_strain"))
 	)
 ))
