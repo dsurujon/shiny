@@ -1,7 +1,7 @@
 ShinyEDGE: Exploration of Differential Gene Expression
 -----------------------------------------
 
-This app allows exploratory data analysis on RNAseq data. It comes pre-loaded with data from Zhu et al 2019 where two strains of *Streptococcus pneumoniae* (19F and T4) are treated with 4 different antibiotics (LVX, KAN, VNC, RIF). To access the app with this dataset, visit http://bioinformatics.bc.edu/shiny/ShinyEDGE/
+This app allows exploratory data analysis on RNAseq data. It comes pre-loaded with data from Zhu et al 2019 *(in preparation)* where two strains of *Streptococcus pneumoniae* (19F and T4) are treated with 4 different antibiotics (LVX, KAN, VNC, RIF). To access the app with this dataset, visit http://bioinformatics.bc.edu/shiny/ShinyEDGE/
 
 There are 4 panels that allow for different types of data exploration: 
 * **Single Experiment:** plot differential expression (DE) against any other metadata associated with genes (e.g. to answer whether essential genes are more downregulated, you can select Essetiality as the x-axis metadata variable)
