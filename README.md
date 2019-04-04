@@ -22,3 +22,7 @@ lasso_microbiome
 pangenome_app
 ---------------------------
 [This app](https://dsurujon.shinyapps.io/pangenome_app) allows the user to select up to 374 strains of Streptococcus pneumoniae. It computes the core(genes shared by all) and pan(genes appearing in at least one strain) genome sizes for the selected strains, and also produces a dendrogram based on shared genes. There is also a downloadable table displayed that lists all genes found in the selected strains, with their gene locus information.
+
+ShinyEDGE: Exploration of Differential Gene Expression
+---------------------------
+This app enables hypothesis generating and exploratory data analysis on RNAseq data. For detailed usage notes, please refer to the app-specific Readme page. 
