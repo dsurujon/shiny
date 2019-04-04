@@ -2,7 +2,6 @@
 library(ggplot2)
 library(visNetwork)
 library(igraph)
-library(RColorBrewer)
 library(shiny)
 
 source('./scripts/make_RNAseq_longtable.R')

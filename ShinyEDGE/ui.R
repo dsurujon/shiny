@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+library(visNetwork)
 
 exptsheet<-read.csv('./data/exptsheet.csv', header=T, stringsAsFactors = F)
 
@@ -87,12 +88,15 @@ shinyUI(fluidPage(
                     selectInput('strain_panel3', 'Select strain/organism', unique(exptsheet$Strain))
                   ),
                   fluidRow(
-                    textAreaInput('findgenes_panel3', 'Paste gene list for subsetting the heatmap- one gene per row', value=""),
-                    plotOutput('allexpt_heatmap')
-                  ),
-                  fluidRow(
-                    uiOutput('PCA_color_selector'),
-                    plotOutput('allexpt_PCA')
+                    column(width=6,
+                      textAreaInput('findgenes_panel3', 'Paste gene list for subsetting the heatmap- one gene per row', value=""),
+                      plotOutput('allexpt_heatmap',  height='800px')
+                    ),
+                    column(width=6,
+                      uiOutput('PCA_color_selector'),
+                      plotOutput('allexpt_PCA')
+                    )
+
                   )
                   
                   
