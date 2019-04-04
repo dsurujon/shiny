@@ -54,18 +54,19 @@ shinyServer(function(input, output) {
   
   # select x axis variable
   selectedaxis_single <- reactive({
+    validate(need(nrow(values$RNAdata_single)>0, message="Waiting for datasets to be loaded..."))
     thisaxis <- input$xaxis_variable
   })
   
   # plot DGE against selected x-axis variable
   output$TIGsingleplot <- renderPlot({
-    validate(need(values$RNAdata_single, message="Waiting for datasets to be loaded..."))
+    validate(need(nrow(values$RNAdata_single)>0, message="Waiting for datasets to be loaded..."))
     
     df <- values$RNAdata_single
     myaxis = selectedaxis_single()
     df <- df[!is.na(df$log2FoldChange) & !is.na(df[myaxis]) & 
                df$Gene %in% values$geneselection_single,]
-
+    
     boolScale <- scale_colour_manual(name="TIG", values=c('black', 'darkgreen'))
     myalpha <- 1-input$alpha_single
     
@@ -94,9 +95,14 @@ shinyServer(function(input, output) {
   })
   
   # Table ouptut of selected genes
-  output$brushedTable_single <- renderDataTable(
-    brushedPoints(values$RNAdata_single,input$plot1_brush, allRows=F, xvar = selectedaxis_single(), yvar="log2FoldChange")
-  )
+  output$brushedTable_single <- renderDataTable({
+    df <- values$RNAdata_single
+    myaxis = selectedaxis_single()
+    df <- df[!is.na(df$log2FoldChange) & !is.na(df[myaxis]) & 
+               df$Gene %in% values$geneselection_single,]
+    
+    brushedPoints(df,input$plot1_brush, allRows=F, xvar = selectedaxis_single(), yvar="log2FoldChange")
+  })
   
   #############
   ## Panel 2 ##
