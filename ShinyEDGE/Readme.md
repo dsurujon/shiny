@@ -29,7 +29,7 @@ In this plot we compare the Rifampicin (RIF) response to Kanamycin (KAN) in the 
 ![Panel2 Example](https://contattafiles.s3.us-west-1.amazonaws.com/tnt8877/vwJuQxV5TmEgvfv/Pasted%20Image%3A%20Apr%204%2C%202019%20-%201%3A06%3A38pm)
 
 ### Compare All Experiments
-This panel allows a more global comparison across all conditions (for a given strain/organism). Selec the strain you would like to visualize using the dropdown menu. The heatmap on the left will show DE from all experiments (columns) for all genes (rows). The plot on the right is the first two principal components, where each point is an experiment/timepoint. The dropdown menu allows you to color the points by one variable on the experiment sheet.     
+This panel allows a more global comparison across all conditions (for a given strain/organism). Select the strain you would like to visualize using the dropdown menu. The heatmap on the left will show DE from all experiments (columns) for all genes (rows). The plot on the right is the first two principal components, where each point is an experiment/timepoint. The dropdown menu allows you to color the points by one variable on the experiment sheet.     
 ![Panel3 example](https://contattafiles.s3.us-west-1.amazonaws.com/tnt8877/w0hHg9BZ6aWxgkJ/Pasted%20Image%3A%20Apr%204%2C%202019%20-%203%3A49%3A19pm)
 
 ### Network
