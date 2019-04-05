@@ -94,7 +94,8 @@ shinyUI(fluidPage(
                     ),
                     column(width=6,
                       uiOutput('PCA_color_selector'),
-                      plotOutput('allexpt_PCA')
+                      plotOutput('allexpt_PCA'),
+                      plotOutput('PCA_screeplot')
                     )
 
                   )

@@ -205,6 +205,7 @@ shinyServer(function(input, output) {
   # heatmap of all RNAseq experiments
   output$allexpt_heatmap <- renderPlot({
     RNAseq_panel3_mx <- values$RNAseq_panel3_mx
+
     # get rid of NA
     for(i in 1:ncol(RNAseq_panel3_mx)){
       RNAseq_panel3_mx[is.na(RNAseq_panel3_mx[,i]), i] <- mean(RNAseq_panel3_mx[,i], na.rm = TRUE)
@@ -225,10 +226,25 @@ shinyServer(function(input, output) {
       RNAseq_panel3_mx[is.na(RNAseq_panel3_mx[,i]), i] <- mean(RNAseq_panel3_mx[,i], na.rm = TRUE)
     }
     pca <- prcomp(t(RNAseq_panel3_mx), scale=T)
+    values$pca <- pca
     colorvar <- input$PCA_color
     pca_df <- as.data.frame(pca$x)
     pca_df <- cbind(pca_df, values$exptsheet_subset)
     ggplot(pca_df, aes_string(x="PC1", y="PC2", color=colorvar))+theme_bw()+geom_point()
+  })
+  #scree plot
+  output$PCA_screeplot <- renderPlot({
+    pca <- values$pca
+    myvars <- pca$sdev^2
+    vars_pct <- 100*myvars/sum(myvars)
+    
+    plot(x=c(1:10), y=vars_pct[1:10], type='b',
+            main="% Variance explained by each component", xaxt='n',
+         xlab="Component", ylab="% Variance")
+    
+    xtick<-c('PC1', 'PC2', 'PC3', 'PC4', 'PC5', 'PC6', 'PC7', 'PC8', 'PC9', 'PC10')
+    text(x=c(1:10),  par("usr")[3], 
+         labels = xtick, srt = 45, pos = 1, xpd = TRUE)
   })
   
   #############
@@ -319,11 +335,11 @@ shinyServer(function(input, output) {
   
   output$networkx_selector <- renderUI({
     selectInput('networkstats_x', 'X axis variable', 
-                c(values$metacols_network, 'Degree', 'Betweenness', 'Eigencentrality'))
+                c(values$metacols_network))
   })
   output$networky_selector <- renderUI({
     selectInput('networkstats_y', 'Y axis variable', 
-                c(values$metacols_network, 'Degree', 'Betweenness', 'Eigencentrality'))
+                c('Degree', 'Betweenness', 'Eigencentrality'))
   })
   output$networkcolor_selector <- renderUI({
     selectInput('networkstats_col', 'Color variable', 
