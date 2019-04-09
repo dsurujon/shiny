@@ -2,7 +2,7 @@ library(igraph)
 
 make_node_table<-function(edgetable){
   #make new nodes table from edges
-  nodes<-as.character(unique(c(edgetable$source,edgetable$target)))
+  nodes<-as.character(unique(c(edgetable['source'],edgetable['target'])))
   nodeIDs<-c(1:(length(nodes)))
   nodetable<-data.frame("label"=nodes,"id"=nodeIDs)
   
